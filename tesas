@@ -1,2 +1,24 @@
-def main():
-    print("Hello, world!")
+#!/usr/bin/env python3
+
+def draw_tree(height=5):
+    """Draw a simple ASCII tree."""
+    if height < 3:
+        height = 3
+    width = height * 2 - 1
+    trunk_height = max(2, height // 3)
+
+    # Draw foliage
+    for i in range(height):
+        stars = '*' * (2 * i + 1)
+        print(stars.center(width))
+
+    # Draw trunk
+    trunk_width = width // 3
+    if trunk_width % 2 == 0:
+        trunk_width += 1
+    for _ in range(trunk_height):
+        trunk = '|' * trunk_width
+        print(trunk.center(width))
+
+if __name__ == '__main__':
+    draw_tree()
