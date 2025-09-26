@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pick Insights Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="header-text">
+          <h1>Pick Insights Studio</h1>
+          <p>
+            Organize every expert pick, track consensus, and surface outliers at a
+            glance. Add games, layer in resources, and let the dashboard crunch
+            the numbers.
+          </p>
+        </div>
+        <div class="header-actions">
+          <button id="exportButton" class="ghost-button" type="button">
+            Export Setup
+          </button>
+          <label class="ghost-button" for="importInput">
+            Import Setup
+            <input id="importInput" type="file" accept="application/json" />
+          </label>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel">
+          <h2>Build Your Slate</h2>
+          <form id="addGameForm" class="form-grid">
+            <label class="field">
+              <span>Matchup</span>
+              <input
+                id="gameNameInput"
+                type="text"
+                placeholder="E.g. Bills @ Chiefs"
+                required
+              />
+            </label>
+            <label class="field">
+              <span>Kickoff (optional)</span>
+              <input id="gameTimeInput" type="datetime-local" />
+            </label>
+            <label class="field field--wide">
+              <span>Tags (comma separated)</span>
+              <input id="gameTagsInput" type="text" placeholder="Primetime, Weather" />
+            </label>
+            <label class="field field--wide">
+              <span>Quick Notes</span>
+              <textarea
+                id="gameNotesInput"
+                placeholder="Key injuries, matchup context, betting trends..."
+                rows="2"
+              ></textarea>
+            </label>
+            <button class="primary" type="submit">Add Game</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Resource Library</h2>
+            <p>
+              Manage the expert voices you track. These appear as suggestions
+              when adding picks to any game.
+            </p>
+          </div>
+          <form id="addSourceForm" class="source-form">
+            <input id="sourceNameInput" type="text" placeholder="Resource name" />
+            <input
+              id="sourceTypeInput"
+              type="text"
+              placeholder="Type (podcast, model, beat writer...)"
+            />
+            <input id="sourceUrlInput" type="url" placeholder="Link (optional)" />
+            <button class="secondary" type="submit">Add Resource</button>
+          </form>
+          <div id="sourceList" class="source-list"></div>
+        </section>
+
+        <section id="gamesContainer" class="games-grid"></section>
+      </main>
+    </div>
+
+    <datalist id="sourceOptions"></datalist>
+
+    <template id="gameTemplate">
+      <article class="game-card">
+        <header class="game-card__header">
+          <div>
+            <h3 class="game-card__title"></h3>
+            <p class="game-card__meta"></p>
+          </div>
+          <div class="game-card__actions">
+            <button class="ghost-button js-duplicate">Duplicate</button>
+            <button class="ghost-button js-archive">Archive</button>
+            <button class="ghost-button ghost-button--danger js-delete">Delete</button>
+          </div>
+        </header>
+        <section class="game-card__body">
+          <div class="picks-table-wrapper">
+            <table class="picks-table">
+              <thead>
+                <tr>
+                  <th>Resource</th>
+                  <th>Pick</th>
+                  <th>Confidence</th>
+                  <th>Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <button class="secondary js-add-row" type="button">Add Pick</button>
+          </div>
+          <aside class="game-card__insights">
+            <div class="insight-block">
+              <h4>Consensus Meter</h4>
+              <div class="meter">
+                <div class="meter__bar"></div>
+              </div>
+              <p class="meter__label"></p>
+            </div>
+            <div class="insight-block">
+              <h4>Pick Breakdown</h4>
+              <div class="breakdown"></div>
+            </div>
+            <div class="insight-block insight-block--notes">
+              <h4>Game Notes</h4>
+              <textarea class="game-notes"></textarea>
+            </div>
+          </aside>
+        </section>
+      </article>
+    </template>
+
+    <template id="pickRowTemplate">
+      <tr>
+        <td>
+          <input class="pick-source" list="sourceOptions" placeholder="Who" />
+        </td>
+        <td>
+          <input class="pick-choice" placeholder="Team or bet" />
+        </td>
+        <td>
+          <input class="pick-confidence" type="number" min="0" max="100" placeholder="%" />
+        </td>
+        <td>
+          <input class="pick-notes" placeholder="Angle or remark" />
+        </td>
+        <td>
+          <button class="ghost-button ghost-button--danger js-remove-row" type="button">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
